@@ -47,14 +47,13 @@ class StartActivity : AppCompatActivity() {
 
 
         firebaseAuth = FirebaseAuth.getInstance()
-/*
+
         if (firebaseAuth.currentUser != null) {
             val intent = Intent(this, MainActivity::class.java);
             startActivity(intent);
             finish();
         }
 
- */
         log_btn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }

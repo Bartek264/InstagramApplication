@@ -9,10 +9,12 @@
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable/selected.xml" value="0.4324074074074074" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_login.xml" value="0.4583333333333333" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_main.xml" value="0.5541666666666667" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_post.xml" value="0.1" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_start.xml" value="0.4583333333333333" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_home.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_notification.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_search.xml" value="0.2692502532928065" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/user_item.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/menu/bottomnav_bar.xml" value="0.1" />
       </map>
     </option>
