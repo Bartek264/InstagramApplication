@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "690662556083",
+    "firebase_url": "https://fir-start-ca4ab-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fir-start-ca4ab",
+    "storage_bucket": "fir-start-ca4ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690662556083:android:89c213e134f9ca3c200bc6",
+        "android_client_info": {
+          "package_name": "eu.firebase.instagramapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690662556083-o2k22p4ani4euei0iqradj582p3ma9m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQBX6YTVApK_v8pWHjQdh0YUUL5vsGFIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690662556083-o2k22p4ani4euei0iqradj582p3ma9m5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
