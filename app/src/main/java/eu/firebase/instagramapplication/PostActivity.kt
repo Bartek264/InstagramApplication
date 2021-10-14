@@ -84,7 +84,7 @@ class PostActivity : AppCompatActivity() {
 
                     //Create a database for the post
                     FirebaseDatabase.getInstance().getReference("Posts").child(postId)
-                        .setValue(PostData(myUri, description.text.toString(),FirebaseAuth.getInstance().currentUser!!.uid))
+                        .setValue(PostData(postId, myUri, description.text.toString(),FirebaseAuth.getInstance().currentUser!!.uid))
 
                     //ProgressDialog off
                     progressDialog.dismiss()

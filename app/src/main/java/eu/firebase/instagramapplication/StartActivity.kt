@@ -77,8 +77,7 @@ class StartActivity : AppCompatActivity() {
     }
 
     private fun userLogin(username: String, email: String){
-        val nameid = email.split("@")[0]
-        FirebaseDatabase.getInstance().getReference("Users").child(nameid).setValue(UserData(email,username,firebaseAuth.currentUser!!.uid, "https://firebasestorage.googleapis.com/v0/b/fir-start-ca4ab.appspot.com/o/no-avatar.png?alt=media&token=1923290c-2653-4672-9233-214152346b39"))
+        FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.currentUser!!.uid).setValue(UserData(email,username,firebaseAuth.currentUser!!.uid, "https://firebasestorage.googleapis.com/v0/b/fir-start-ca4ab.appspot.com/o/no-avatar.png?alt=media&token=1923290c-2653-4672-9233-214152346b39"))
         startActivity(Intent(this, MainActivity::class.java))
         progressDialog.dismiss()
         finish()
