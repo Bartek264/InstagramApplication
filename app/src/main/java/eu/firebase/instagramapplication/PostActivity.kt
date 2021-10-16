@@ -1,6 +1,5 @@
 package eu.firebase.instagramapplication
 
-import android.accounts.AuthenticatorDescription
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -11,17 +10,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.theartofdev.edmodo.cropper.CropImage
 import eu.firebase.instagramapplication.model.PostData
-import org.w3c.dom.Text
 
 class PostActivity : AppCompatActivity() {
 
@@ -102,7 +97,7 @@ class PostActivity : AppCompatActivity() {
         }
     }
 
-    fun getFileExtension(uri: Uri):String{
+    private fun getFileExtension(uri: Uri):String{
         val contentResolver = contentResolver
         val mime = MimeTypeMap.getSingleton()
         return mime.getExtensionFromMimeType(contentResolver.getType(uri)).toString()
