@@ -1,6 +1,7 @@
 package eu.firebase.instagramapplication.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import eu.firebase.instagramapplication.CommentsActivity
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.model.PostData
 import eu.firebase.instagramapplication.model.UserData
+import org.w3c.dom.Text
 
 class PostAdapter(
     var mContext : Context,
@@ -73,6 +76,32 @@ class PostAdapter(
             holder.description.text = post.description
         }
         publisherInfo(holder.profile_img, holder.username, holder.publisher,post.postId)
+        likes(post.postId, holder.like)
+        nrLikes(holder.likes, post.postId)
+        getComments(holder.comments,post.postId)
+
+        holder.like.setOnClickListener {
+            if (holder.like.getTag() == "like"){
+                FirebaseDatabase.getInstance().getReference("Likes").child(post.postId)
+                    .child(firebaseUser.uid).setValue(true)
+            }else{
+                FirebaseDatabase.getInstance().getReference("Likes").child(post.postId)
+                    .child(firebaseUser.uid).removeValue()
+            }
+        }
+
+        holder.comment.setOnClickListener {
+            val intent = Intent(mContext, CommentsActivity::class.java)
+            intent.putExtra("postId", post.postId)
+            intent.putExtra("publisherId", post.publisher)
+            mContext.startActivity(intent)
+        }
+        holder.comments.setOnClickListener {
+            val intent = Intent(mContext, CommentsActivity::class.java)
+            intent.putExtra("postId", post.postId)
+            intent.putExtra("publisherId", post.publisher)
+            mContext.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -91,6 +120,53 @@ class PostAdapter(
                     username.text = user?.username
                     publisher.text = user?.username
                 }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+
+    private fun likes(postId: String, imageView: ImageView){
+     val firebaseUser = FirebaseAuth.getInstance().currentUser
+     val reference = FirebaseDatabase.getInstance().getReference("Likes")
+         .child(postId)
+
+     reference.addValueEventListener(object : ValueEventListener{
+         override fun onDataChange(dataSnapshot: DataSnapshot) {
+             if (dataSnapshot.child(firebaseUser!!.uid).exists()){
+                 imageView.setImageResource(R.drawable.ic_like_on)
+                 imageView.tag = "liked"
+             }else{
+                 imageView.setImageResource(R.drawable.ic_like)
+                 imageView.tag = "like"
+             }
+         }
+
+         override fun onCancelled(error: DatabaseError) {
+         }
+     })
+    }
+
+    private fun nrLikes(likes: TextView, postId: String){
+        val reference =FirebaseDatabase.getInstance().getReference("Likes").child(postId)
+
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                likes.setText(snapshot.childrenCount.toString() + " likes")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+
+    fun getComments(comment: TextView, postId: String){
+        val reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId)
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                comment.setText("View All " + snapshot.childrenCount + " Comments")
             }
 
             override fun onCancelled(error: DatabaseError) {

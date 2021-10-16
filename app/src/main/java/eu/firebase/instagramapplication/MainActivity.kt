@@ -25,6 +25,21 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
 
+        val intent = getIntent().extras
+        if (intent!=null){
+            val publisher = intent.getString("publisherId")
+
+            val editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit()
+            editor.putString("publisherId", publisher)
+            editor.apply()
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment()).commit()
+        }else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment()).commit()
+        }
+
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_home -> {

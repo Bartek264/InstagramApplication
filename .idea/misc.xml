@@ -6,11 +6,16 @@
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable-v24/edittext_background.xml" value="0.5703125" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable-v24/gradient_background.xml" value="0.5703125" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable-v24/ic_add.xml" value="0.35" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable-v24/ic_comment.xml" value="0.262037037037037" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable/selected.xml" value="0.4324074074074074" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/drawable/toolbar.xml" value="0.34427083333333336" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_comments.xml" value="0.25" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_login.xml" value="0.4583333333333333" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_main.xml" value="0.5541666666666667" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_post.xml" value="0.1" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/activity_start.xml" value="0.4583333333333333" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/comment_item.xml" value="0.2692502532928065" />
+        <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/comment_toolbar.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_home.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_notification.xml" value="0.2692502532928065" />
         <entry key="..\:/FirebaseApp/InstagramApplication/app/src/main/res/layout/fragment_search.xml" value="0.2692502532928065" />
