@@ -53,13 +53,12 @@ class CommentAdapter(
                 for (snapshot: DataSnapshot in dataSnapshot.children){
                     val user = snapshot.getValue(UserData::class.java)
                     Glide.with(mContext).load(user?.imageUrl).into(imageView)
-                    username.setText(user?.username)
+                    username.text = user?.username
                 }
 
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
         })
 
