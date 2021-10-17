@@ -1,11 +1,13 @@
 package eu.firebase.instagramapplication.adapter
 
 import android.content.Context
+import android.view.ContentInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import de.hdodenhof.circleimageview.CircleImageView
 import eu.firebase.instagramapplication.R
+import eu.firebase.instagramapplication.fragment.ProfileFragment
 import eu.firebase.instagramapplication.model.UserData
 import java.util.ArrayList
 
@@ -80,6 +83,16 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
         //Blocking the possibility of self-follower
         if (user.id == firebaseUser.uid){
             holder.btn_follow.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+            editor.putString("profileid", user.id)
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
+                R.id.fragment_container,
+                ProfileFragment()
+            ).commit()
         }
 
         holder.btn_follow.setOnClickListener {

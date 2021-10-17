@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.firebase.instagramapplication.CommentsActivity
 import eu.firebase.instagramapplication.R
+import eu.firebase.instagramapplication.fragment.PostDetailFragment
+import eu.firebase.instagramapplication.fragment.ProfileFragment
 import eu.firebase.instagramapplication.model.PostData
 import eu.firebase.instagramapplication.model.UserData
 import org.w3c.dom.Text
@@ -79,6 +82,50 @@ class PostAdapter(
         likes(post.postId, holder.like)
         nrLikes(holder.likes, post.postId)
         getComments(holder.comments,post.postId)
+        isSaved(post.postId, holder.save)
+
+        holder.profile_img.setOnClickListener {
+            val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+            editor.putString("profileId", post.publisher)
+            editor.apply()
+
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
+                R.id.fragment_container,
+                ProfileFragment()
+            ).commit()
+        }
+
+        holder.publisher.setOnClickListener {
+            val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+            editor.putString("profileId", post.publisher)
+            editor.apply()
+
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
+                R.id.fragment_container,
+                ProfileFragment()
+            ).commit()
+        }
+
+        holder.post_img.setOnClickListener {
+            val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+            editor.putString("postId", post.postId)
+            editor.apply()
+
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
+                R.id.fragment_container,
+                PostDetailFragment()
+            ).commit()
+        }
+
+        holder.save.setOnClickListener {
+            if (holder.save.tag == "save"){
+                FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
+                    .child(post.postId).setValue(true)
+            }else{
+                FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
+                    .child(post.postId).removeValue()
+            }
+        }
 
         holder.like.setOnClickListener {
             if (holder.like.getTag() == "like"){
@@ -162,11 +209,30 @@ class PostAdapter(
         })
     }
 
-    fun getComments(comment: TextView, postId: String){
+    private fun getComments(comment: TextView, postId: String){
         val reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId)
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 comment.setText("View All " + snapshot.childrenCount + " Comments")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
+    private fun isSaved(postId: String, imageView: ImageView){
+        val reference = FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+
+        reference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.child(postId).exists()){
+                    imageView.setImageResource(R.drawable.ic_saved)
+                    imageView.tag = "saved"
+                }else{
+                    imageView.setImageResource(R.drawable.ic_save_black)
+                    imageView.tag = "save"
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
