@@ -1,6 +1,7 @@
 package eu.firebase.instagramapplication.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.service.autofill.UserData
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import eu.firebase.instagramapplication.EditProfileActivity
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.adapter.FotoAdapter
 import eu.firebase.instagramapplication.model.PostData
@@ -113,7 +115,8 @@ class ProfileFragment : Fragment() {
 
         edit_profile.setOnClickListener {
             if (edit_profile.text.toString() == "Edit profile"){
-
+                val intent = Intent(context, EditProfileActivity::class.java)
+                startActivity(intent)
             }else if (edit_profile.text.toString() == "follow"){
                 //After pressing, add a record to the database
                 FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
@@ -150,7 +153,8 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(eu.firebase.instagramapplication.model.UserData::class.java)
                 username.text = user?.username
-                fullname.text = user?.email
+                fullname.text = user?.fullname
+                bio.text = user?.bio
                 for (snapshot: DataSnapshot in dataSnapshot.children){
                     Glide.with(context!!).load(user?.imageUrl).into(image_profile)
 
