@@ -11,10 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import eu.firebase.instagramapplication.adapter.CommentAdapter
-import eu.firebase.instagramapplication.model.Comment
-import eu.firebase.instagramapplication.model.CommentData
-import eu.firebase.instagramapplication.model.PostData
-import eu.firebase.instagramapplication.model.UserData
+import eu.firebase.instagramapplication.model.*
 import java.util.HashMap
 
 class CommentsActivity() : AppCompatActivity() {
@@ -76,6 +73,7 @@ class CommentsActivity() : AppCompatActivity() {
 
         FirebaseDatabase.getInstance().getReference("Comments").child(post).push().setValue(CommentData(commentid!!,addcomment.text.toString(),firebaseUser.uid))
 
+        addNotification()
         addcomment.setText("")
     }
 
@@ -101,6 +99,7 @@ class CommentsActivity() : AppCompatActivity() {
             .child(postId)
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                commentList.clear()
                 for (snapshot: DataSnapshot in dataSnapshot.children){
                     val comment = snapshot.getValue(Comment::class.java)!!
                     commentList.add(comment)
@@ -109,8 +108,14 @@ class CommentsActivity() : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
         })
+    }
+
+    private fun addNotification(){
+        FirebaseDatabase.getInstance().getReference("Notifications").child(publishedId)
+            .setValue(NotificationData(userId = firebaseUser.uid,"commented " + addcomment.text.toString()
+                ,postId, true))
+
     }
 }

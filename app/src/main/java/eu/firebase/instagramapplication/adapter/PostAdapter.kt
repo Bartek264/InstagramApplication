@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
@@ -17,9 +18,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.firebase.instagramapplication.CommentsActivity
+import eu.firebase.instagramapplication.FollowersActivity
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.fragment.PostDetailFragment
 import eu.firebase.instagramapplication.fragment.ProfileFragment
+import eu.firebase.instagramapplication.model.NotificationData
 import eu.firebase.instagramapplication.model.PostData
 import eu.firebase.instagramapplication.model.UserData
 import org.w3c.dom.Text
@@ -70,7 +73,8 @@ class PostAdapter(
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         val post = mPost[position]
 
-        Glide.with(mContext).load(post.postImage).into(holder.post_img)
+        Glide.with(mContext).load(post.postImage)
+            .apply(RequestOptions.placeholderOf(R.drawable.placeholder)).into(holder.post_img)
 
         if (post.description.isEmpty()){
             holder.description.visibility = View.GONE
@@ -131,6 +135,7 @@ class PostAdapter(
             if (holder.like.getTag() == "like"){
                 FirebaseDatabase.getInstance().getReference("Likes").child(post.postId)
                     .child(firebaseUser.uid).setValue(true)
+                addNotification(post.publisher, post.postId)
             }else{
                 FirebaseDatabase.getInstance().getReference("Likes").child(post.postId)
                     .child(firebaseUser.uid).removeValue()
@@ -149,13 +154,26 @@ class PostAdapter(
             intent.putExtra("publisherId", post.publisher)
             mContext.startActivity(intent)
         }
+        holder.likes.setOnClickListener {
+            val intent = Intent(mContext, FollowersActivity::class.java)
+            intent.putExtra("id", post.postId)
+            intent.putExtra("title", "likes")
+            mContext.startActivity(intent)
+        }
+    }
+
+    private fun addNotification(userId: String, postid: String){
+
+        FirebaseDatabase.getInstance().getReference("Notifications").child(userId)
+            .setValue(NotificationData(userId = firebaseUser.uid,"liked your post",postid, true))
+
     }
 
     override fun getItemCount(): Int {
         return mPost.size
     }
 
-    fun publisherInfo(image_profile: ImageView, username: TextView, publisher: TextView, userId: String){
+    private fun publisherInfo(image_profile: ImageView, username: TextView, publisher: TextView, userId: String){
         val reference = FirebaseDatabase.getInstance()
 
         reference.getReference("Users").orderByChild(userId).addValueEventListener(object : ValueEventListener{
@@ -173,8 +191,6 @@ class PostAdapter(
             }
         })
     }
-
-
     private fun likes(postId: String, imageView: ImageView){
      val firebaseUser = FirebaseAuth.getInstance().currentUser
      val reference = FirebaseDatabase.getInstance().getReference("Likes")
@@ -195,7 +211,6 @@ class PostAdapter(
          }
      })
     }
-
     private fun nrLikes(likes: TextView, postId: String){
         val reference =FirebaseDatabase.getInstance().getReference("Likes").child(postId)
 
@@ -208,7 +223,6 @@ class PostAdapter(
             }
         })
     }
-
     private fun getComments(comment: TextView, postId: String){
         val reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId)
         reference.addValueEventListener(object : ValueEventListener{

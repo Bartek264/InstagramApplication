@@ -23,8 +23,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import eu.firebase.instagramapplication.EditProfileActivity
+import eu.firebase.instagramapplication.FollowersActivity
+import eu.firebase.instagramapplication.OptionsActivity
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.adapter.FotoAdapter
+import eu.firebase.instagramapplication.model.NotificationData
 import eu.firebase.instagramapplication.model.PostData
 import java.util.*
 import kotlin.collections.ArrayList
@@ -123,6 +126,8 @@ class ProfileFragment : Fragment() {
                     .child("following").child(profileId).setValue(true)
                 FirebaseDatabase.getInstance().reference.child("Follow").child(profileId)
                     .child("followers").child(firebaseUser.uid).setValue(true)
+
+                addNotification()
             }else if (edit_profile.text.toString() == "following"){
                 //After pressing, delete the record from the database
                 FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
@@ -139,6 +144,21 @@ class ProfileFragment : Fragment() {
         saved_fotos.setOnClickListener {
             recyclerView.visibility = View.GONE
             recyclerViewSaves.visibility = View.VISIBLE
+        }
+        followers.setOnClickListener {
+            val intent = Intent(context, FollowersActivity::class.java)
+            intent.putExtra("id", profileId)
+            intent.putExtra("title", "followers")
+            startActivity(intent)
+        }
+        following.setOnClickListener {
+            val intent = Intent(context, FollowersActivity::class.java)
+            intent.putExtra("id", profileId)
+            intent.putExtra("title", "following")
+            startActivity(intent)
+        }
+        options.setOnClickListener {
+            startActivity(Intent(context, OptionsActivity::class.java))
         }
         return v
     }
@@ -298,5 +318,10 @@ class ProfileFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
             }
         })
+    }
+
+    private fun addNotification(){
+        FirebaseDatabase.getInstance().getReference("Notifications").child(profileId)
+            .setValue(NotificationData(userId = firebaseUser.uid,"started following you", "", false))
     }
 }

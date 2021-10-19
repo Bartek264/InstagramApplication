@@ -1,6 +1,7 @@
 package eu.firebase.instagramapplication.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.ContentInfo
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import de.hdodenhof.circleimageview.CircleImageView
+import eu.firebase.instagramapplication.MainActivity
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.fragment.ProfileFragment
+import eu.firebase.instagramapplication.model.NotificationData
 import eu.firebase.instagramapplication.model.UserData
 import java.util.ArrayList
 
-class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
+class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>, var isFragment: Boolean):
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     lateinit var firebaseUser: FirebaseUser
@@ -64,12 +67,12 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
         })
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view : View = LayoutInflater.from(mContext).inflate(R.layout.user_item, parent, false)
-        return UserAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         val user = mUser[position]
@@ -86,14 +89,22 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
         }
 
         holder.itemView.setOnClickListener {
-            val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
-            editor.putString("profileid", user.id)
-            editor.apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
-                R.id.fragment_container,
-                ProfileFragment()
-            ).commit()
+            if (isFragment){
+                val editor = mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit()
+                editor.putString("profileid", user.id)
+                editor.apply()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(
+                    R.id.fragment_container,
+                    ProfileFragment()
+                ).commit()
+            }else{
+                val intent = Intent(mContext, MainActivity::class.java)
+                intent.putExtra("publisherid", user.id)
+                mContext.startActivity(intent)
+            }
+
         }
+
 
         holder.btn_follow.setOnClickListener {
             if (holder.btn_follow.text == "follow"){
@@ -101,6 +112,8 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
                     .child("following").child(user.id).setValue(true)
                 FirebaseDatabase.getInstance().reference.child("Follow").child(user.id)
                     .child("followers").child(firebaseUser.uid).setValue(true)
+
+                addNotification(user.id)
             }else{
                 FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
                     .child("following").child(user.id).removeValue()
@@ -113,5 +126,12 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>):
 
     override fun getItemCount(): Int {
         return mUser.size
+    }
+
+    private fun addNotification(userId: String){
+
+        FirebaseDatabase.getInstance().getReference("Notifications").child(userId)
+            .setValue(NotificationData(userId = firebaseUser.uid,"started following you","", true))
+
     }
 }
