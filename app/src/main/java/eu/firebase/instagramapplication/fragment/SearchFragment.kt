@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
 
         mUser = ArrayList()
         search_bar = v.findViewById(R.id.search_bar)
-        userAdapter = UserAdapter(requireContext(), mUser)
+        userAdapter = UserAdapter(requireContext(), mUser, true)
         recyclerView.adapter = userAdapter
 
         readUsers()
