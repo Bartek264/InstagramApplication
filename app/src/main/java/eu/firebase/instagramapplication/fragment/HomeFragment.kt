@@ -7,29 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import eu.firebase.instagramapplication.R
 import eu.firebase.instagramapplication.adapter.PostAdapter
-import eu.firebase.instagramapplication.adapter.StoryAdapter
 import eu.firebase.instagramapplication.model.PostData
-import eu.firebase.instagramapplication.model.StoryData
-import eu.firebase.instagramapplication.model.UserData
 
 class HomeFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView
     lateinit var postAdapter: PostAdapter
     lateinit var postList: ArrayList<PostData>
-
-    lateinit var recyclerViewStory: RecyclerView
-    lateinit var storyAdapter: StoryAdapter
-    lateinit var storyList: ArrayList<StoryData>
 
     lateinit var progressBar: ProgressBar
 
@@ -45,29 +34,20 @@ class HomeFragment : Fragment() {
 
         recyclerView = v.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(context)
-        linearLayoutManager.reverseLayout = true
-        linearLayoutManager.stackFromEnd = true
-        recyclerView.layoutManager = linearLayoutManager
+        val mLayoutManager = LinearLayoutManager(context)
+        mLayoutManager.reverseLayout = true
+        mLayoutManager.stackFromEnd = true
+        recyclerView.layoutManager = mLayoutManager
         postList = ArrayList()
         postAdapter = PostAdapter(requireContext(), postList)
         recyclerView.adapter = postAdapter
 
-        recyclerViewStory = v.findViewById(R.id.recycler_view_story)
-        recyclerViewStory.setHasFixedSize(true)
-        val linearLayoutManagerStory = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewStory.layoutManager = linearLayoutManagerStory
-        storyList = ArrayList()
-        storyAdapter =StoryAdapter(requireContext(), storyList)
-        recyclerViewStory.adapter = storyAdapter
-
         checkFollowing()
-
 
         return v
     }
 
-    fun checkFollowing(){
+    private fun checkFollowing(){
         followingList = ArrayList()
 
         val reference = FirebaseDatabase.getInstance().getReference("Follow")
@@ -82,7 +62,6 @@ class HomeFragment : Fragment() {
                 }
 
                 readPosts()
-                //readStory()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -91,7 +70,7 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun readPosts(){
+    private fun readPosts(){
         val reference = FirebaseDatabase.getInstance().getReference("Posts")
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -108,34 +87,6 @@ class HomeFragment : Fragment() {
                 }
                 postAdapter.notifyDataSetChanged()
                 progressBar.visibility = View.GONE
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
-    }
-
-    private fun readStory(){
-        val reference = FirebaseDatabase.getInstance().getReference("Story")
-        reference.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val timeCurrent = System.currentTimeMillis()
-                storyList.clear()
-                storyList.add(StoryData("",0,0,"", FirebaseAuth.getInstance().currentUser!!.uid))
-                for (id in followingList){
-                    var countStory = 0
-                    var story : StoryData? = null
-                    for (snapshot in dataSnapshot.child(id).children){
-                        story = snapshot.getValue(StoryData::class.java)!!
-                        if (timeCurrent > story.timeStart && timeCurrent < story.timeEnd){
-                            countStory++
-                        }
-                    }
-                    if (countStory > 0){
-                        storyList.add(story!!)
-                    }
-                }
-                storyAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
