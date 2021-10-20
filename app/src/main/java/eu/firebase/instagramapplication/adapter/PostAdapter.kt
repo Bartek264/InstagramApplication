@@ -13,10 +13,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
+import com.google.firebase.firestore.auth.User
 import eu.firebase.instagramapplication.CommentsActivity
 import eu.firebase.instagramapplication.FollowersActivity
 import eu.firebase.instagramapplication.R
@@ -82,7 +80,7 @@ class PostAdapter(
             holder.description.visibility = View.VISIBLE
             holder.description.text = post.description
         }
-        publisherInfo(holder.profile_img, holder.username, holder.publisher,post.postId)
+        publisherInfo(holder.profile_img, holder.username, holder.publisher,post.publisher)
         likes(post.postId, holder.like)
         nrLikes(holder.likes, post.postId)
         getComments(holder.comments,post.postId)
@@ -173,24 +171,25 @@ class PostAdapter(
         return mPost.size
     }
 
-    private fun publisherInfo(image_profile: ImageView, username: TextView, publisher: TextView, userId: String){
-        val reference = FirebaseDatabase.getInstance()
-
-        reference.getReference("Users").orderByChild(userId).addValueEventListener(object : ValueEventListener{
+    private fun publisherInfo(
+        image_profile: ImageView,
+        username: TextView,
+        publisher: TextView,
+        userid: String
+    ) {
+        val reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot: DataSnapshot in dataSnapshot.children){
-                    val user: UserData? = snapshot.getValue(UserData::class.java)
-
-                    Glide.with(mContext).load(user?.imageUrl).into(image_profile)
-                    username.text = user?.username
-                    publisher.text = user?.username
-                }
+                val user: UserData? = dataSnapshot.getValue(UserData::class.java)
+                Glide.with(mContext).load(user?.imageUrl).into(image_profile)
+                username.text = user?.username
+                publisher.text = user?.username
             }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
+            override fun onCancelled(databaseError: DatabaseError) {}
         })
     }
+
     private fun likes(postId: String, imageView: ImageView){
      val firebaseUser = FirebaseAuth.getInstance().currentUser
      val reference = FirebaseDatabase.getInstance().getReference("Likes")
