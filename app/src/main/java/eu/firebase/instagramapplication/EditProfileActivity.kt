@@ -127,7 +127,6 @@ class EditProfileActivity : AppCompatActivity() {
         uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 throw task.exception!!
-
             }
             return@continueWithTask fileReference.downloadUrl
         }.addOnCompleteListener { task ->

@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
 
-        val intent = getIntent().extras
+        val intent = intent.extras
         if (intent!=null){
             val publisher = intent.getString("publisherId")
 
