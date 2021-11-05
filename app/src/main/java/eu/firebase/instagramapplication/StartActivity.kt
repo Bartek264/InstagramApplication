@@ -20,9 +20,6 @@ import android.widget.TextView
 
 import android.widget.ProgressBar
 
-
-
-
 class StartActivity : AppCompatActivity() {
     lateinit var firebaseAuth: FirebaseAuth
 
@@ -34,6 +31,7 @@ class StartActivity : AppCompatActivity() {
 
     lateinit var reg_btn: Button
     lateinit var log_btn: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)

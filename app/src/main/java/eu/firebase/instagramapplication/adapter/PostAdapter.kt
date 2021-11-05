@@ -71,6 +71,8 @@ class PostAdapter(
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         val post = mPost[position]
 
+
+
         Glide.with(mContext).load(post.postImage)
             .apply(RequestOptions.placeholderOf(R.drawable.placeholder)).into(holder.post_img)
 
