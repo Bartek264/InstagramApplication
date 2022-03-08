@@ -1,7 +1,11 @@
-# InstagramApplication
+## Instagram simple clone application
 
-What to do to make the application work
+The goal of the project was to make a simple clone of the popular Instagram app.
+For this purpose, the application uses:
+- [x] Kotlin
+- [x] Firebase
+- [x] Android Jetpack 
 
-1) Enter the site https://firebase.google.com
-2) Add the application to your project according to the information on the page
-3) Make sure to add the Google JSON file to the APP folder
+The database is based on Google Firebase, which allows you to easily log in via:
+- [x] email
+- [x] google account
