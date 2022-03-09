@@ -13,6 +13,8 @@ The database is based on Google Firebase, which allows you to easily log in via:
 - [x] email
 - [x] google account
 
+Thanks to Constraintlayout, each layout has been responsively designed so that the application can be targeted at phones and tablets.
+
 |Pixel 2 screenshoot|Tablet screenshoot|
 |---|---|
 |![Pixel 2](https://github.com/Bartek264/InstagramApplication/blob/master/repoimg/pixel.png)|![Tablet](https://github.com/Bartek264/InstagramApplication/blob/master/repoimg/tablet.png)|
