@@ -130,8 +130,8 @@ class UserAdapter(val mContext: Context, val mUser: ArrayList<UserData>, var isF
 
     private fun addNotification(userId: String){
 
-        FirebaseDatabase.getInstance().getReference("Notifications").child(userId)
-            .setValue(NotificationData(userId = firebaseUser.uid,"started following you","", true))
+        FirebaseDatabase.getInstance().getReference("Notifications").child(userId).push()
+            .setValue(NotificationData(userId = firebaseUser.uid,"started following you","", "yes"))
 
     }
 }

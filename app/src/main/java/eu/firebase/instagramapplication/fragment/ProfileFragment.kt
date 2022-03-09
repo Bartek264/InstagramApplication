@@ -159,6 +159,7 @@ class ProfileFragment : Fragment() {
         }
         options.setOnClickListener {
             startActivity(Intent(context, OptionsActivity::class.java))
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
         return v
     }
@@ -322,6 +323,6 @@ class ProfileFragment : Fragment() {
 
     private fun addNotification(){
         FirebaseDatabase.getInstance().getReference("Notifications").child(profileId)
-            .setValue(NotificationData(userId = firebaseUser.uid,"started following you", "", false))
+            .setValue(NotificationData(userId = firebaseUser.uid,"started following you", "", "no"))
     }
 }

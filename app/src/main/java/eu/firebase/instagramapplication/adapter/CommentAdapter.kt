@@ -50,11 +50,9 @@ class CommentAdapter(
 
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot: DataSnapshot in dataSnapshot.children){
-                    val user = snapshot.getValue(UserData::class.java)
-                    Glide.with(mContext).load(user?.imageUrl).into(imageView)
-                    username.text = user?.username
-                }
+                val user = dataSnapshot.getValue(UserData::class.java)!!
+                Glide.with(mContext).load(user.imageUrl).into(imageView)
+                username.text = user.username
 
             }
 
@@ -73,16 +71,16 @@ class CommentAdapter(
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         val comment = mComment[position]
         holder.comment.setText(comment.comment)
-        getUserInfo(holder.image_profile, holder.username, comment.posting)
+        getUserInfo(holder.image_profile, holder.username, comment.publisherId)
 
         holder.comment.setOnClickListener {
             val intent = Intent(mContext, MainActivity::class.java)
-            intent.putExtra("publisherId", comment.posting)
+            intent.putExtra("publisherId", comment.publisherId)
             mContext.startActivity(intent)
         }
         holder.image_profile.setOnClickListener {
             val intent = Intent(mContext, MainActivity::class.java)
-            intent.putExtra("publisherId", comment.posting)
+            intent.putExtra("publisherId", comment.publisherId)
             mContext.startActivity(intent)
         }
     }

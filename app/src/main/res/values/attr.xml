@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="monoThemeColor" format="color"/>
+    <attr name="colorPrimaryBackground" format="color"/>
+    <attr name="colorPrimaryLightBackground" format="color"/>
+    <attr name="separator" format="color"/>
+</resources>

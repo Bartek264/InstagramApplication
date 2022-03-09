@@ -12,5 +12,19 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="monoThemeColor">@color/dark_grey</item>
+        <item name="colorPrimaryBackground">@color/white</item>
+        <item name="colorPrimaryLightBackground">@color/white</item>
+        <item name="separator">@color/white</item>
+
     </style>
+
+    <style name="Theme.InstagramApplication.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.InstagramApplication.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.InstagramApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -20,6 +20,8 @@ class CommentsActivity() : AppCompatActivity() {
     lateinit var commentAdapter: CommentAdapter
     lateinit var commentList: ArrayList<Comment>
 
+    lateinit var back: ImageView
+
     lateinit var addcomment: EditText
     lateinit var image_profile: ImageView
     lateinit var post: TextView
@@ -33,10 +35,7 @@ class CommentsActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comments)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "Comment"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        back = findViewById(R.id.back)
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.hasFixedSize()
@@ -56,6 +55,10 @@ class CommentsActivity() : AppCompatActivity() {
         postId = intent.getStringExtra("postId").toString()
         publishedId = intent.getStringExtra("publisherId").toString()
 
+        back.setOnClickListener {
+            finish()
+        }
+
         post.setOnClickListener {
             if (addcomment.text.toString() == ""){
                 Toast.makeText(this, "You can't send empty comment", Toast.LENGTH_SHORT).show()
@@ -71,7 +74,9 @@ class CommentsActivity() : AppCompatActivity() {
         val reference = FirebaseDatabase.getInstance().getReference("Comments").child(post)
         val commentid = reference.push().key
 
-        FirebaseDatabase.getInstance().getReference("Comments").child(post).push().setValue(CommentData(commentid!!,addcomment.text.toString(),firebaseUser.uid))
+        FirebaseDatabase.getInstance().getReference("Comments").child(post).push()
+            .setValue(CommentData(commentid!!,addcomment.text.toString(),firebaseUser.uid))
+            .addOnCompleteListener {}
 
         addNotification()
         addcomment.setText("")
@@ -84,9 +89,6 @@ class CommentsActivity() : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val user = dataSnapshot.getValue(UserData::class.java)
                 Glide.with(applicationContext).load(user?.imageUrl).into(image_profile)
-                for (snapshot: DataSnapshot in dataSnapshot.children){
-
-                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -113,9 +115,9 @@ class CommentsActivity() : AppCompatActivity() {
     }
 
     private fun addNotification(){
-        FirebaseDatabase.getInstance().getReference("Notifications").child(publishedId)
+        FirebaseDatabase.getInstance().getReference("Notifications").child(publishedId).push()
             .setValue(NotificationData(userId = firebaseUser.uid,"commented " + addcomment.text.toString()
-                ,postId, true))
+                ,postId, "yes"))
 
     }
 }

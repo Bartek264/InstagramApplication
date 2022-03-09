@@ -65,17 +65,16 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchUser(s: String){
-        val query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
-            .startAt(s)
-            .endAt(s+"\uf8ff")
-
+        val query = FirebaseDatabase.getInstance().getReference("Users")
         query.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(databaseSnapshot: DataSnapshot) {
                 mUser.clear()
                 for (snapshot:DataSnapshot in databaseSnapshot.children) {
                     val user = snapshot.getValue(UserData::class.java)!!
+                    if (user.username.toLowerCase().startsWith(s)){
+                        mUser.add(user)
+                    }
 
-                    mUser.add(user)
                 }
 
                 userAdapter.notifyDataSetChanged()

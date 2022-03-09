@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:textStyle="italic|bold"
-            android:textColor="@color/black"
             android:text="username"/>
         <TextView
             android:id="@+id/fullname"

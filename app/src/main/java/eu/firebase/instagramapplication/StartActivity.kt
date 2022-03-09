@@ -19,9 +19,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 import android.widget.ProgressBar
+import eu.firebase.instagramapplication.login.googleLogin
 
-class StartActivity : AppCompatActivity() {
-    lateinit var firebaseAuth: FirebaseAuth
+open class StartActivity : AppCompatActivity() {
+    private lateinit var firebaseAuth: FirebaseAuth
 
     lateinit var progressDialog: ProgressDialog
 
@@ -29,6 +30,7 @@ class StartActivity : AppCompatActivity() {
     lateinit var reg_password: EditText
     lateinit var reg_email: EditText
 
+    lateinit var google_btn: Button
     lateinit var reg_btn: Button
     lateinit var log_btn: TextView
 
@@ -43,6 +45,13 @@ class StartActivity : AppCompatActivity() {
         reg_btn = findViewById(R.id.regis_btn)
         log_btn = findViewById(R.id.login)
 
+        google_btn = findViewById(R.id.google_button)
+
+        google_btn.setOnClickListener {
+            val intent = Intent(this, googleLogin::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            startActivity(intent)
+        }
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -77,7 +86,7 @@ class StartActivity : AppCompatActivity() {
     private fun userLogin(username: String, email: String){
         FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.currentUser!!.uid)
             .setValue(UserData(email,username,firebaseAuth.currentUser!!.uid,
-                "https://firebasestorage.googleapis.com/v0/b/fir-start-ca4ab.appspot.com/o/no-avatar.png?alt=media&token=1923290c-2653-4672-9233-214152346b39",""))
+                "https://firebasestorage.googleapis.com/v0/b/githubapps-d5c56.appspot.com/o/899048ab0cc455154006fdb9676964b3.jpg?alt=media&token=38e1180f-270d-4bbb-bf70-c29939d20778",""))
         startActivity(Intent(this, MainActivity::class.java))
         progressDialog.dismiss()
         finish()

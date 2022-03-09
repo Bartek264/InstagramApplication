@@ -2,6 +2,8 @@ package eu.firebase.instagramapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -19,8 +21,11 @@ class FollowersActivity : AppCompatActivity() {
     lateinit var id: String
     lateinit var title: String
 
+    lateinit var toolbarTitle: TextView
+
     lateinit var idList: ArrayList<String>
 
+    lateinit var backBtn: ImageView
     lateinit var recyclerView: RecyclerView
     lateinit var userAdapter: UserAdapter
     lateinit var userList: ArrayList<eu.firebase.instagramapplication.model.UserData>
@@ -29,16 +34,16 @@ class FollowersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
 
+        toolbarTitle = findViewById(R.id.title)
+        backBtn = findViewById(R.id.close)
+
         val intent = intent
         id = intent.getStringExtra("id")!!
         title = intent.getStringExtra("title")!!
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = title
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbarTitle.text = title
 
-        toolbar.setOnClickListener {
+        backBtn.setOnClickListener {
             finish()
         }
 

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +21,8 @@ class PostDetailFragment : Fragment() {
 
     lateinit var postId: String
 
+    lateinit var back: ImageView
+
     lateinit var postAdapter: PostAdapter
     lateinit var postList: ArrayList<PostData>
     lateinit var recyclerView: RecyclerView
@@ -31,6 +34,12 @@ class PostDetailFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_post_detail, container, false)
 
         val preferences = context?.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
+        back = v.findViewById(R.id.close)
+
+        back.setOnClickListener {
+            requireActivity().finish()
+            requireActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        }
 
         postId = preferences?.getString("postId", "none")!!
 

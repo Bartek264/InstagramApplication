@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.MimeTypeMap
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -31,11 +33,11 @@ class EditProfileActivity : AppCompatActivity() {
     lateinit var close: ImageView
     lateinit var image_profile: ImageView
     lateinit var save: TextView
-    lateinit var img_change: TextView
+    lateinit var img_change: LinearLayout
 
-    lateinit var fullname: MaterialEditText
-    lateinit var username: MaterialEditText
-    lateinit var bio: MaterialEditText
+    lateinit var fullname: TextInputEditText
+    lateinit var username: TextInputEditText
+    lateinit var bio: TextInputEditText
 
     lateinit var firebaseUser: FirebaseUser
 
@@ -76,6 +78,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         close.setOnClickListener {
             finish()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
         }
         img_change.setOnClickListener {
 
@@ -85,6 +88,7 @@ class EditProfileActivity : AppCompatActivity() {
         save.setOnClickListener {
             updateProfile(fullname.text.toString(),
             username.text.toString(),bio.text.toString())
+            Toast.makeText(this, "Updated!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -106,9 +110,6 @@ class EditProfileActivity : AppCompatActivity() {
         reference.updateChildren(hashMap)
     }
 
-    /**
-     *
-     */
     private fun getFileExtension(uri: Uri):String{
         val contentResolver = contentResolver
         val mime = MimeTypeMap.getSingleton()
@@ -155,10 +156,9 @@ class EditProfileActivity : AppCompatActivity() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
             val result = CropImage.getActivityResult(data)
             mImageUri = result.uri
-
             uploadImage()
         }else{
-            Toast.makeText(this, "Whops! Something gone wrong", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "The changes have not been implemented", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -2,6 +2,7 @@ package eu.firebase.instagramapplication.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -164,8 +165,8 @@ class PostAdapter(
 
     private fun addNotification(userId: String, postid: String){
 
-        FirebaseDatabase.getInstance().getReference("Notifications").child(userId)
-            .setValue(NotificationData(userId = firebaseUser.uid,"liked your post",postid, true))
+        FirebaseDatabase.getInstance().getReference("Notifications").child(userId).push()
+            .setValue(NotificationData(userId = firebaseUser.uid,"liked your post",postid, "yes"))
 
     }
 
