@@ -1,8 +1,10 @@
 package eu.firebase.instagramapplication
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -66,5 +68,19 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+    override fun onBackPressed() {
+        val text = "Are you sure you want to exit?"
+        val textYes = "Yes"
+        val textNo ="No"
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(text)
+            .setCancelable(false)
+            .setPositiveButton(textYes,
+                DialogInterface.OnClickListener { dialog, id -> this.finish() })
+            .setNegativeButton(textNo,
+                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 }
